@@ -1,5 +1,7 @@
 // src/App.jsx
 import { BrowserRouter as Router, Route, Routes } from "react-router-dom";
+import { ToastContainer } from "react-toastify"; // Import ToastContainer
+import "react-toastify/dist/ReactToastify.css"; // Import Toastify CSS
 import Home from "./components/Home";
 import Login from "./components/Login";
 import Register from "./components/Register";
@@ -40,6 +42,7 @@ const App = () => {
         <Route path="*" element={<NotFound />} />
       </Routes>
       <Footer /> {/* Add Footer */}
+      <ToastContainer /> {/* Add ToastContainer */}
     </Router>
   );
 };

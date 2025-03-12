@@ -5,37 +5,64 @@ import {
   createUserWithEmailAndPassword,
   GoogleAuthProvider,
   signInWithPopup,
+  updateProfile,
 } from "firebase/auth";
 import { auth } from "../firebase";
+import { toast } from "react-toastify";
 
 const Register = () => {
+  const [name, setName] = useState("");
   const [email, setEmail] = useState("");
+  const [photoURL, setPhotoURL] = useState("");
   const [password, setPassword] = useState("");
   const [error, setError] = useState("");
   const navigate = useNavigate();
+  const provider = new GoogleAuthProvider();
 
-  // Handle email/password registration
+  // Password validation function
+  const isValidPassword = (password) => {
+    return (
+      /[A-Z]/.test(password) && // At least one uppercase
+      /[a-z]/.test(password) && // At least one lowercase
+      password.length >= 6 // Minimum 6 characters
+    );
+  };
+
+  // Handle Registration
   const handleRegister = async (e) => {
     e.preventDefault();
+    if (!isValidPassword(password)) {
+      setError(
+        "Password must have at least 6 characters, an uppercase letter, and a lowercase letter."
+      );
+      return;
+    }
     try {
-      await createUserWithEmailAndPassword(auth, email, password);
-      alert("User registered successfully!");
-      navigate("/login"); // Redirect to login page after registration
+      const userCredential = await createUserWithEmailAndPassword(
+        auth,
+        email,
+        password
+      );
+      await updateProfile(userCredential.user, {
+        displayName: name,
+        photoURL: photoURL,
+      });
+      toast.success("Registered successfully!");
+      navigate("/"); // Navigate to Home
     } catch (error) {
       setError(error.message);
+      toast.error("Registration failed.");
     }
   };
 
-  // Handle Google Sign-In
+  // Handle Google Register
   const handleGoogleRegister = async () => {
-    const provider = new GoogleAuthProvider();
     try {
       await signInWithPopup(auth, provider);
-      alert("Registered with Google successfully!");
-      navigate("/home"); // Redirect to home page after successful Google registration
+      toast.success("Registered with Google!");
+      navigate("/"); // Navigate to Home
     } catch (error) {
-      console.error("Google registration error", error.message);
-      setError(error.message);
+      toast.error("Google registration failed.");
     }
   };
 
@@ -45,39 +72,53 @@ const Register = () => {
         <h2 className="text-2xl font-bold mb-6 text-center">Register</h2>
         <form onSubmit={handleRegister} className="space-y-4">
           <input
+            type="text"
+            placeholder="Name"
+            value={name}
+            onChange={(e) => setName(e.target.value)}
+            required
+            className="w-full px-4 py-2 border rounded-lg"
+          />
+          <input
             type="email"
             placeholder="Email"
             value={email}
             onChange={(e) => setEmail(e.target.value)}
-            className="w-full px-4 py-2 border rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
+            required
+            className="w-full px-4 py-2 border rounded-lg"
+          />
+          <input
+            type="text"
+            placeholder="Photo URL"
+            value={photoURL}
+            onChange={(e) => setPhotoURL(e.target.value)}
+            className="w-full px-4 py-2 border rounded-lg"
           />
           <input
             type="password"
             placeholder="Password"
             value={password}
             onChange={(e) => setPassword(e.target.value)}
-            className="w-full px-4 py-2 border rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
+            required
+            className="w-full px-4 py-2 border rounded-lg"
           />
           <button
             type="submit"
-            className="w-full bg-blue-500 text-white py-2 rounded-lg hover:bg-blue-600 transition duration-200"
+            className="w-full bg-blue-500 text-white py-2 rounded-lg hover:bg-blue-600"
           >
             Register
           </button>
         </form>
 
-        {/* Google Sign-In Button */}
         <button
           onClick={handleGoogleRegister}
-          className="w-full mt-4 bg-red-500 text-white py-2 rounded-lg hover:bg-red-600 transition duration-200"
+          className="w-full mt-4 bg-red-500 text-white py-2 rounded-lg hover:bg-red-600"
         >
           Register with Google
         </button>
 
-        {/* Error Message */}
         {error && <p className="mt-4 text-red-500 text-center">{error}</p>}
 
-        {/* Link to Login Page */}
         <p className="mt-4 text-center">
           Already have an account?{" "}
           <Link to="/login" className="text-blue-500 hover:underline">
