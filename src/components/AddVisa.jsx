@@ -124,6 +124,46 @@ const AddVisa = () => {
             className="w-full p-2 border rounded"
           />
 
+          <input
+            type="text"
+            name="fee"
+            placeholder="Fee (e.g., $100)"
+            value={visaData.fee}
+            onChange={handleChange}
+            required
+            className="w-full p-2 border rounded"
+          />
+
+          <input
+            type="text"
+            name="validity"
+            placeholder="Validity (e.g., 1 year)"
+            value={visaData.validity}
+            onChange={handleChange}
+            required
+            className="w-full p-2 border rounded"
+          />
+
+          <input
+            type="text"
+            name="ageRestriction"
+            placeholder="Age Restriction (e.g., 18+)"
+            value={visaData.ageRestriction}
+            onChange={handleChange}
+            required
+            className="w-full p-2 border rounded"
+          />
+
+          <input
+            type="text"
+            name="applicationMethod"
+            placeholder="Application Method (e.g., Online)"
+            value={visaData.applicationMethod}
+            onChange={handleChange}
+            required
+            className="w-full p-2 border rounded"
+          />
+
           <button
             type="submit"
             className="w-full bg-blue-500 text-white py-2 rounded hover:bg-blue-600"
