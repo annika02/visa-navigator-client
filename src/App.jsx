@@ -13,7 +13,7 @@ import Header from "./components/Header";
 import Footer from "./components/Footer"; // Import Footer
 import NotFound from "./components/NotFound"; // Import NotFound
 import PrivateRoute from "./components/PrivateRoute";
-
+import ForgotPassword from "./components/ForgotPassword";
 const App = () => {
   return (
     <Router>
@@ -23,6 +23,7 @@ const App = () => {
         <Route path="/all-visas" element={<AllVisas />} />
         <Route path="/login" element={<Login />} />
         <Route path="/register" element={<Register />} />
+        <Route path="/forgot-password" element={<ForgotPassword />} />
 
         {/* Protected Routes */}
         <Route

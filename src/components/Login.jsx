@@ -83,6 +83,14 @@ const Login = () => {
         {/* Error Message */}
         {error && <p className="mt-4 text-red-500 text-center">{error}</p>}
 
+        {/* Forgot Password Link */}
+        <p className="mt-2 text-center">
+          <Link to="/forgot-password" className="text-blue-500 hover:underline">
+            Forgot Password?
+          </Link>
+        </p>
+
+        {/* Register Link */}
         <p className="mt-4 text-center">
           Don't have an account?{" "}
           <Link to="/register" className="text-blue-500 hover:underline">
