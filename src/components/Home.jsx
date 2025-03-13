@@ -7,7 +7,7 @@ const HomePage = () => {
 
   useEffect(() => {
     axios
-      .get("http://localhost:5000/visas")
+      .get("http://localhost:5000/api/visas")
       .then((response) => setVisas(response.data))
       .catch((error) => console.error("Error fetching visas:", error));
   }, []);

@@ -8,13 +8,12 @@ const AllVisas = () => {
   const [filteredVisas, setFilteredVisas] = useState([]);
   const [selectedVisaType, setSelectedVisaType] = useState("All");
 
-  // Fetch visas from the database
   useEffect(() => {
-    fetch("http://localhost:5000/visas")
+    fetch("http://localhost:5000/api/visas")
       .then((res) => res.json())
       .then((data) => {
         setVisas(data);
-        setFilteredVisas(data); // Initialize filtered visas with all visas
+        setFilteredVisas(data);
         setLoading(false);
       })
       .catch((error) => {
@@ -23,20 +22,16 @@ const AllVisas = () => {
       });
   }, []);
 
-  // Handle filter by visa type
   const handleFilterChange = (e) => {
     const type = e.target.value;
     setSelectedVisaType(type);
-
     if (type === "All") {
-      setFilteredVisas(visas); // Show all visas
+      setFilteredVisas(visas);
     } else {
-      const filtered = visas.filter((visa) => visa.visaType === type);
-      setFilteredVisas(filtered); // Filter by visa type
+      setFilteredVisas(visas.filter((visa) => visa.visaType === type));
     }
   };
 
-  // Delete Visa Function
   const handleDelete = (id) => {
     Swal.fire({
       title: "Are you sure?",
@@ -47,15 +42,10 @@ const AllVisas = () => {
       cancelButtonText: "Cancel",
     }).then((result) => {
       if (result.isConfirmed) {
-        fetch(`http://localhost:5000/visas/${id}`, {
+        fetch(`http://localhost:5000/api/visas/${id}`, {
           method: "DELETE",
         })
-          .then((res) => {
-            if (!res.ok) {
-              throw new Error("Failed to delete visa.");
-            }
-            return res.json();
-          })
+          .then((res) => res.json())
           .then((data) => {
             if (data.success) {
               setVisas(visas.filter((visa) => visa._id !== id));
@@ -65,10 +55,7 @@ const AllVisas = () => {
               Swal.fire("Error!", "Failed to delete visa.", "error");
             }
           })
-          .catch((error) => {
-            console.error("Error deleting visa:", error);
-            Swal.fire("Error!", "Something went wrong.", "error");
-          });
+          .catch(() => Swal.fire("Error!", "Something went wrong.", "error"));
       }
     });
   };
@@ -76,8 +63,6 @@ const AllVisas = () => {
   return (
     <div className="container mx-auto p-6">
       <h2 className="text-3xl font-bold text-center mb-6">All Visas</h2>
-
-      {/* Filter Dropdown */}
       <div className="mb-6">
         <label htmlFor="visaType" className="mr-2">
           Filter by Visa Type:
@@ -96,9 +81,9 @@ const AllVisas = () => {
       </div>
 
       {loading ? (
-        <p className="text-center">Loading visas...</p>
+        <p>Loading visas...</p>
       ) : filteredVisas.length === 0 ? (
-        <p className="text-center text-gray-600">No visas available.</p>
+        <p>No visas available.</p>
       ) : (
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
           {filteredVisas.map((visa) => (
@@ -112,31 +97,17 @@ const AllVisas = () => {
               <p>
                 <strong>Visa Type:</strong> {visa.visaType}
               </p>
-              <p>
-                <strong>Processing Time:</strong> {visa.processingTime}
-              </p>
-              <p>
-                <strong>Fee:</strong> ${visa.fee}
-              </p>
-              <p>
-                <strong>Validity:</strong> {visa.validity}
-              </p>
-              <p>
-                <strong>Age Restriction:</strong> {visa.ageRestriction}+
-              </p>
 
-              {/* See Details Button */}
               <Link
                 to={`/visa-details/${visa._id}`}
-                className="bg-blue-500 text-white mt-4 px-4 py-2 rounded hover:bg-blue-700 block text-center"
+                className="bg-blue-500 text-white mt-4 px-4 py-2 rounded block text-center"
               >
                 See Details
               </Link>
 
-              {/* Delete Button */}
               <button
                 onClick={() => handleDelete(visa._id)}
-                className="bg-red-500 text-white mt-4 px-4 py-2 rounded hover:bg-red-700 w-full"
+                className="bg-red-500 text-white mt-4 px-4 py-2 rounded w-full"
               >
                 Delete Visa
               </button>

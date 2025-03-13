@@ -1,4 +1,3 @@
-// src/components/AddVisa.jsx
 import { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { toast } from "react-toastify";
@@ -19,45 +18,40 @@ const AddVisa = () => {
 
   const navigate = useNavigate();
 
-  // Handle input change
+  // Handle input changes
   const handleChange = (e) => {
     const { name, value } = e.target;
     setVisaData({ ...visaData, [name]: value });
   };
 
-  // Handle checkbox selection
+  // Handle checkbox changes
   const handleCheckboxChange = (e) => {
     const { value, checked } = e.target;
-    const updatedDocuments = checked
+    const updatedDocs = checked
       ? [...visaData.requiredDocuments, value]
       : visaData.requiredDocuments.filter((doc) => doc !== value);
-
-    setVisaData({ ...visaData, requiredDocuments: updatedDocuments });
+    setVisaData({ ...visaData, requiredDocuments: updatedDocs });
   };
 
-  // Handle form submission
+  // Submit form
   const handleSubmit = async (e) => {
     e.preventDefault();
-
     try {
-      // Send data to your backend
-      const response = await fetch("http://localhost:5000/add-visa", {
+      const response = await fetch("http://localhost:5000/api/visas/add-visa", {
         method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-        },
+        headers: { "Content-Type": "application/json" },
         body: JSON.stringify(visaData),
       });
 
       if (response.ok) {
         toast.success("Visa added successfully!");
-        navigate("/all-visas"); // Redirect to All Visas page
+        navigate("/all-visas");
       } else {
-        toast.error("Failed to add visa. Please try again.");
+        toast.error("Failed to add visa.");
       }
     } catch (error) {
-      toast.error("Error adding visa. Please check your input.");
       console.error("Error:", error);
+      toast.error("Error adding visa.");
     }
   };
 
@@ -67,7 +61,6 @@ const AddVisa = () => {
         <h2 className="text-3xl font-bold mb-6 text-center">Add Visa</h2>
 
         <form onSubmit={handleSubmit} className="space-y-4">
-          {/* Country Image */}
           <input
             type="text"
             name="countryImage"
@@ -78,7 +71,6 @@ const AddVisa = () => {
             className="w-full p-2 border rounded"
           />
 
-          {/* Country Name */}
           <input
             type="text"
             name="countryName"
@@ -89,7 +81,6 @@ const AddVisa = () => {
             className="w-full p-2 border rounded"
           />
 
-          {/* Visa Type (Dropdown) */}
           <select
             name="visaType"
             value={visaData.visaType}
@@ -102,7 +93,6 @@ const AddVisa = () => {
             <option value="Official Visa">Official Visa</option>
           </select>
 
-          {/* Processing Time */}
           <input
             type="text"
             name="processingTime"
@@ -113,13 +103,8 @@ const AddVisa = () => {
             className="w-full p-2 border rounded"
           />
 
-          {/* Required Documents (Checkboxes) */}
-          <label className="block font-semibold">Required Documents:</label>
-          {[
-            "Valid passport",
-            "Visa application form",
-            "Recent passport-sized photograph",
-          ].map((doc) => (
+          <label>Required Documents:</label>
+          {["Valid passport", "Visa application form", "Photo"].map((doc) => (
             <div key={doc} className="flex items-center">
               <input
                 type="checkbox"
@@ -130,7 +115,6 @@ const AddVisa = () => {
             </div>
           ))}
 
-          {/* Description */}
           <textarea
             name="description"
             placeholder="Visa Description"
@@ -140,51 +124,6 @@ const AddVisa = () => {
             className="w-full p-2 border rounded"
           />
 
-          {/* Age Restriction */}
-          <input
-            type="number"
-            name="ageRestriction"
-            placeholder="Age Restriction (e.g., 18)"
-            value={visaData.ageRestriction}
-            onChange={handleChange}
-            required
-            className="w-full p-2 border rounded"
-          />
-
-          {/* Fee */}
-          <input
-            type="number"
-            name="fee"
-            placeholder="Visa Fee (e.g., 150)"
-            value={visaData.fee}
-            onChange={handleChange}
-            required
-            className="w-full p-2 border rounded"
-          />
-
-          {/* Validity */}
-          <input
-            type="text"
-            name="validity"
-            placeholder="Validity (e.g., 6 months)"
-            value={visaData.validity}
-            onChange={handleChange}
-            required
-            className="w-full p-2 border rounded"
-          />
-
-          {/* Application Method */}
-          <input
-            type="text"
-            name="applicationMethod"
-            placeholder="Application Method (e.g., Online, In-person)"
-            value={visaData.applicationMethod}
-            onChange={handleChange}
-            required
-            className="w-full p-2 border rounded"
-          />
-
-          {/* Submit Button */}
           <button
             type="submit"
             className="w-full bg-blue-500 text-white py-2 rounded hover:bg-blue-600"
