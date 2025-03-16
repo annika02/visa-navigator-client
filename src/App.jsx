@@ -14,39 +14,41 @@ import Footer from "./components/Footer";
 import NotFound from "./components/NotFound";
 import PrivateRoute from "./components/PrivateRoute";
 import ForgotPassword from "./components/ForgotPassword";
-
+import { AuthProvider } from "./context/AuthContext";
 const App = () => {
   return (
-    <Router>
-      <Header />
-      <Routes>
-        <Route path="/" element={<Home />} />
-        <Route path="/all-visas" element={<AllVisas />} />
-        <Route path="/visa-details/:id" element={<VisaDetails />} />
-        <Route path="/login" element={<Login />} />
-        <Route path="/register" element={<Register />} />
-        <Route path="/forgot-password" element={<ForgotPassword />} />
+    <AuthProvider>
+      <Router>
+        <Header />
+        <Routes>
+          <Route path="/" element={<Home />} />
+          <Route path="/all-visas" element={<AllVisas />} />
+          <Route path="/visa-details/:id" element={<VisaDetails />} />
+          <Route path="/login" element={<Login />} />
+          <Route path="/register" element={<Register />} />
+          <Route path="/forgot-password" element={<ForgotPassword />} />
 
-        {/* Protected Routes */}
-        <Route
-          path="/add-visa"
-          element={<PrivateRoute element={<AddVisa />} />}
-        />
-        <Route
-          path="/my-added-visas"
-          element={<PrivateRoute element={<MyAddedVisas />} />}
-        />
-        <Route
-          path="/my-visa-applications"
-          element={<PrivateRoute element={<MyVisaApplications />} />}
-        />
+          {/* Protected Routes */}
+          <Route
+            path="/add-visa"
+            element={<PrivateRoute element={<AddVisa />} />}
+          />
+          <Route
+            path="/my-added-visas"
+            element={<PrivateRoute element={<MyAddedVisas />} />}
+          />
+          <Route
+            path="/my-visa-applications"
+            element={<PrivateRoute element={<MyVisaApplications />} />}
+          />
 
-        {/* 404 Page */}
-        <Route path="*" element={<NotFound />} />
-      </Routes>
-      <Footer />
-      <ToastContainer />
-    </Router>
+          {/* 404 Page */}
+          <Route path="*" element={<NotFound />} />
+        </Routes>
+        <Footer />
+        <ToastContainer />
+      </Router>
+    </AuthProvider>
   );
 };
 
